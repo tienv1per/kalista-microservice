@@ -1,5 +1,6 @@
 package com.theshy.microservices.order;
 
+import com.theshy.microservices.order.stubs.InventoryClientStub;
 import io.restassured.RestAssured;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -8,12 +9,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.context.annotation.Import;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
 @Import(TestcontainersConfiguration.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureWireMock(port = 0)
 class OrderServiceApplicationTests {
 	@ServiceConnection
 	static MySQLContainer mySQLContainer = new MySQLContainer(DockerImageName.parse("mysql:8.3.0"));
@@ -35,11 +38,12 @@ class OrderServiceApplicationTests {
 	void shouldSubmitOrder() {
 		String submitOrderJson = """
 			{
-				"skuCode": "Macbook_Pro_M1",
+				"skuCode": "iphone_15",
 				"price": 1111,
-				"quantity": 111
+				"quantity": 1
 			}
 		""";
+		InventoryClientStub.stubInventoryCall("iphone_15", 1);
 
 		var responseBodyString = RestAssured.given()
 				.contentType("application/json")

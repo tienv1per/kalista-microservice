@@ -1,0 +1,25 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: notification-service
+  # kafka consumer properties
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: notification-service
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            type:
+              mapping: event:com.theshy.microservices.order.event.OrderPlacedEvent
+
+  # mail properties
+  mail:
+    host: sandbox.smtp.mailtrap.io
+    port: 2525
+    username: 4225c3e754bca4
+    password: 39c85b1325e322

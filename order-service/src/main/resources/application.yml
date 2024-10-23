@@ -68,3 +68,6 @@ resilience4j:
       inventory:
         max-attempts: 3
         wait-duration: 5s
+
+loki:
+  url: http://localhost:3100/loki/api/v1/push

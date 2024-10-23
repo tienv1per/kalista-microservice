@@ -23,3 +23,26 @@ spring:
     port: 2525
     username: 4225c3e754bca4
     password: 39c85b1325e322
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+  # loki properties
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+  observations:
+    key-values:
+      application: notification-service
+  tracing:
+    sampling:
+      probability: 1.0 # send 100% of the traces it generates to Tempo
+
+# Loki url
+loki:
+  url: http://localhost:3100/loki/api/v1/push
